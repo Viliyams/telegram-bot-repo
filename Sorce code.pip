@@ -1,0 +1,32 @@
+from telegram import Update
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+
+# Define a function for the /start command
+def start(update: Update, context: CallbackContext) -> None:
+    update.message.reply_text("Hello! I'm your bot.")
+
+# Define a function to handle text messages
+def echo(update: Update, context: CallbackContext) -> None:
+    update.message.reply_text(update.message.text)
+
+def main():
+    # Replace 'YOUR_TOKEN' with your actual bot token
+    updater = Updater(token='YOUR_TOKEN', use_context=True)
+
+    # Get the dispatcher to register handlers
+    dispatcher = updater.dispatcher
+
+    # Register command handler for /start
+    dispatcher.add_handler(CommandHandler("start", start))
+
+    # Register message handler
+    dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
+
+    # Start the bot
+    updater.start_polling()
+
+    # Run the bot until Ctrl+C is pressed
+    updater.idle()
+
+if __name__ == '__main__':
+    main()
